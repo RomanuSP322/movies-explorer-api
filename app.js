@@ -8,7 +8,7 @@ const { celebrate, Joi, errors } = require('celebrate');
 const isUrl = require('validator/lib/isURL');
 const NotFoundError = require('./errors/not-found');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
-const crashTest = require('./routes/crash-test.js');
+
 const usersRouter = require('./routes/users.js');
 const cardsRouter = require('./routes/cards.js');
 const { createUser, login } = require('./controllers/users');
@@ -18,7 +18,7 @@ const app = express();
 const { PORT = 3000 } = process.env;
 app.use(cors());
 
-mongoose.connect('mongodb://localhost:27017/mestodb', {
+mongoose.connect('mongodb://localhost:27017/bitfilmsdb', {
   useNewUrlParser: true,
   useCreateIndex: true,
   useFindAndModify: false,
@@ -28,8 +28,6 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(requestLogger);
-
-app.use('/', crashTest);
 
 app.post('/signin', celebrate({
   body: Joi.object().keys({

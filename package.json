@@ -1,7 +1,7 @@
 {
-  "name": "express-mesto",
+  "name": "movies-explorer-api",
   "version": "1.0.0",
-  "description": "backend mesto",
+  "description": "backend movies-explorer",
   "main": "index.js",
   "scripts": {
     "start": "node app.js",
@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "\u0016https://github.com/RomanuSP322/express-mesto.git"
+    "url": "\u0016https://github.com/RomanuSP322/movies-explorer-api.git"
   },
   "author": "Roman",
   "license": "ISC",
