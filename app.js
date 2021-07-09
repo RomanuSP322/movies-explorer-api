@@ -2,15 +2,13 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const { celebrate, Joi, errors } = require('celebrate');
-const isUrl = require('validator/lib/isURL');
 const NotFoundError = require('./errors/not-found');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const usersRouter = require('./routes/users.js');
-const cardsRouter = require('./routes/cards.js');
+const moviesRouter = require('./routes/movies.js');
 const { createUser, login } = require('./controllers/users');
 const auth = require('./middlewares/auth');
 
@@ -26,7 +24,6 @@ mongoose.connect('mongodb://localhost:27017/bitfilmsdb', {
 });
 
 app.use(bodyParser.json());
-app.use(cookieParser());
 app.use(requestLogger);
 
 app.post('/signin', celebrate({
@@ -37,14 +34,7 @@ app.post('/signin', celebrate({
 }), login);
 app.post('/signup', celebrate({
   body: Joi.object().keys({
-    name: Joi.string().min(2).max(30),
-    about: Joi.string().min(2).max(30),
-    avatar: Joi.string().custom((value, helpers) => {
-      if (isUrl(value, { require_protocol: true })) {
-        return value;
-      }
-      return helpers.message('Неверная ссылка');
-    }),
+    name: Joi.string().min(2).max(30).required(),
     email: Joi.string().email().required(),
     password: Joi.string().min(8).required(),
   }),
@@ -52,7 +42,7 @@ app.post('/signup', celebrate({
 
 app.use(auth);
 
-app.use('/', cardsRouter);
+app.use('/', moviesRouter);
 app.use('/', usersRouter);
 app.use(errorLogger);
 app.use('/*', () => { throw new NotFoundError('Страница не найдена'); });
