@@ -14,7 +14,10 @@ module.exports.getMe = (req, res, next) => {
       if (!user) {
         throw new NotFoundError('Такого пользователя не существует');
       }
-      res.send(user);
+      res.send({
+        name: user.name,
+        email: user.email,
+      });
     })
     .catch(next);
 };
@@ -34,7 +37,10 @@ module.exports.updateProfile = (req, res, next) => {
       if (!user) {
         throw new NotFoundError('Такого пользователя не существует');
       }
-      res.send(user);
+      res.send({
+        name: user.name,
+        email: user.email,
+      });
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
@@ -45,17 +51,6 @@ module.exports.updateProfile = (req, res, next) => {
     });
 };
 
-module.exports.getUser = (req, res, next) => {
-  User.findById(req.params.userId)
-    .then((user) => {
-      if (!user) {
-        throw new NotFoundError('Такого пользователя не существует');
-      }
-      res.send(user);
-    })
-    .catch(next);
-};
-
 module.exports.createUser = (req, res, next) => {
   bcrypt
     .hash(req.body.password, 10)
@@ -63,12 +58,10 @@ module.exports.createUser = (req, res, next) => {
       email: req.body.email,
       password: hash,
       name: req.body.name,
-      about: req.body.about,
-      avatar: req.body.avatar,
     }))
     .then((user) => {
       res.status(201).send({
-        _id: user._id,
+        name: user.name,
         email: user.email,
       });
     })

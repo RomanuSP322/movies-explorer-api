@@ -58,8 +58,8 @@ module.exports.deleteMovie = (req, res, next) => {
       if (movie.owner.toString() !== req.user._id.toString()) {
         throw new ForbiddenError('Не хватает прав');
       }
-      Movie.findByIdAndRemove(req.params.cardId)
-        .then((thisCard) => res.send(thisCard));
+      Movie.findByIdAndRemove(req.params.movieId)
+        .then((thisMovie) => res.send(thisMovie));
     })
     .catch(next);
 };
