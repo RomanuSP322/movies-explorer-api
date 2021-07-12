@@ -70,15 +70,12 @@ module.exports.createUser = (req, res, next) => {
       });
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') {
-        const error = new BadRequestError('Некоректные данные');
-        next(error);
-      }
       if (err.name === 'MongoError' && err.code === 11000) {
         const error = new ConflictError('Пользователь уже зарегистрирован');
         next(error);
+      } else {
+        next(err);
       }
-      next(err);
     });
 };
 
