@@ -11,6 +11,7 @@ const usersRouter = require('./routes/users.js');
 const moviesRouter = require('./routes/movies.js');
 const { createUser, login } = require('./controllers/users');
 const auth = require('./middlewares/auth');
+const limiter = require('./utils/rateLimiter');
 
 const app = express();
 const { PORT = 3000 } = process.env;
@@ -24,6 +25,7 @@ mongoose.connect('mongodb://localhost:27017/bitfilmsdb', {
 });
 
 app.use(bodyParser.json());
+app.use(limiter);
 app.use(requestLogger);
 
 app.post('/signin', celebrate({
@@ -44,8 +46,8 @@ app.use(auth);
 
 app.use('/', moviesRouter);
 app.use('/', usersRouter);
-app.use(errorLogger);
 app.use('/*', () => { throw new NotFoundError('Страница не найдена'); });
+app.use(errorLogger);
 app.use(errors());
 
 app.use((err, req, res, next) => {

@@ -51,15 +51,15 @@ module.exports.createMovie = (req, res, next) => {
 
 module.exports.deleteMovie = (req, res, next) => {
   Movie.findById(req.params.movieId)
+    .orFail(() => {
+      throw new NotFoundError('Фильм не найден');
+    })
     .then((movie) => {
-      if (!movie) {
-        throw new NotFoundError('Фильм не найден');
-      }
       if (movie.owner.toString() !== req.user._id.toString()) {
         throw new ForbiddenError('Не хватает прав');
+      } else {
+        return movie.remove().then(() => res.status(200).send(movie));
       }
-      Movie.findByIdAndRemove(req.params.movieId)
-        .then((thisMovie) => res.send(thisMovie));
     })
     .catch(next);
 };

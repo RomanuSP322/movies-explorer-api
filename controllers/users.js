@@ -47,6 +47,10 @@ module.exports.updateProfile = (req, res, next) => {
         const error = new BadRequestError('Некоректные данные');
         next(error);
       }
+      if (err.name === 'MongoError' && err.code === 11000) {
+        const error = new ConflictError('Пользователь с такой почтой уже существует');
+        next(error);
+      }
       next(err);
     });
 };
