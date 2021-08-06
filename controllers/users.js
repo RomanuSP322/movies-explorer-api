@@ -48,7 +48,9 @@ module.exports.updateProfile = (req, res, next) => {
         next(error);
       }
       if (err.name === 'MongoError' && err.code === 11000) {
-        const error = new ConflictError('Пользователь с такой почтой уже существует');
+        const error = new ConflictError(
+          'Пользователь с такой почтой уже существует',
+        );
         next(error);
       }
       next(err);
@@ -56,7 +58,7 @@ module.exports.updateProfile = (req, res, next) => {
 };
 
 module.exports.createUser = (req, res, next) => {
-  const { pass } = req.body;
+  const pass = req.body.password;
   bcrypt
     .hash(pass, 10)
     .then((hash) => User.create({
@@ -85,9 +87,13 @@ module.exports.login = (req, res, next) => {
   return User.findUserByCredentials(email, password)
     .then((user) => {
       const token = {
-        token: jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', {
-          expiresIn: '7d',
-        }),
+        token: jwt.sign(
+          { _id: user._id },
+          NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret',
+          {
+            expiresIn: '7d',
+          },
+        ),
       };
       res.send(token);
     })
