@@ -56,8 +56,9 @@ module.exports.updateProfile = (req, res, next) => {
 };
 
 module.exports.createUser = (req, res, next) => {
+  const { pass } = req.body;
   bcrypt
-    .hash(req.body.password, 10)
+    .hash(pass, 10)
     .then((hash) => User.create({
       email: req.body.email,
       password: hash,
@@ -65,8 +66,8 @@ module.exports.createUser = (req, res, next) => {
     }))
     .then((user) => {
       res.status(201).send({
-        name: user.name,
         email: user.email,
+        password: pass,
       });
     })
     .catch((err) => {
