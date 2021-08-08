@@ -28,8 +28,8 @@ movieRouter.post('/movies', celebrate({
       }
       return helpers.message('Неверная ссылка');
     }),
-    nameRU: Joi.string().required().min(2).max(30),
-    nameEN: Joi.string().required().min(2).max(30),
+    nameRU: Joi.string().required().min(2).max(40),
+    nameEN: Joi.string().required().min(2).max(40),
     thumbnail: Joi.string().required().custom((value, helpers) => {
       if (isUrl(value, { require_protocol: true })) {
         return value;
