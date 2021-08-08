@@ -11,7 +11,7 @@ const {
 movieRouter.get('/movies', getMovies);
 movieRouter.post('/movies', celebrate({
   body: Joi.object().keys({
-    country: Joi.string().required().min(2),
+    country: Joi.string(),
     director: Joi.string().required().min(2),
     duration: Joi.number().required(),
     year: Joi.string().required().min(4),
@@ -22,14 +22,9 @@ movieRouter.post('/movies', celebrate({
       }
       return helpers.message('Неверная ссылка');
     }),
-    trailer: Joi.string().required().custom((value, helpers) => {
-      if (isUrl(value, { require_protocol: true })) {
-        return value;
-      }
-      return helpers.message('Неверная ссылка');
-    }),
+    trailer: Joi.string(),
     nameRU: Joi.string().required().min(2).max(40),
-    nameEN: Joi.string().required().min(2).max(40),
+    nameEN: Joi.string(),
     thumbnail: Joi.string().required().custom((value, helpers) => {
       if (isUrl(value, { require_protocol: true })) {
         return value;
