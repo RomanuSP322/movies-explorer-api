@@ -28,38 +28,44 @@ app.use(bodyParser.json());
 app.use(limiter);
 app.use(requestLogger);
 
-app.post('/signin', celebrate({
-  body: Joi.object().keys({
-    email: Joi.string().email().required(),
-    password: Joi.string().required().min(8),
+app.post(
+  '/signin',
+  celebrate({
+    body: Joi.object().keys({
+      email: Joi.string().email().required(),
+      password: Joi.string().required().min(8),
+    }),
   }),
-}), login);
-app.post('/signup', celebrate({
-  body: Joi.object().keys({
-    name: Joi.string().min(2).max(30).required(),
-    email: Joi.string().email().required(),
-    password: Joi.string().min(8).required(),
+  login,
+);
+app.post(
+  '/signup',
+  celebrate({
+    body: Joi.object().keys({
+      name: Joi.string().min(2).max(30).required(),
+      email: Joi.string().email().required(),
+      password: Joi.string().min(8).required(),
+    }),
   }),
-}), createUser);
+  createUser,
+);
 
 app.use(auth);
 
 app.use('/', moviesRouter);
 app.use('/', usersRouter);
-app.use('/*', () => { throw new NotFoundError('Страница не найдена'); });
+app.use('/*', () => {
+  throw new NotFoundError('Страница не найдена');
+});
 app.use(errorLogger);
 app.use(errors());
 
 app.use((err, req, res, next) => {
   const { statusCode = 500, message } = err;
-  res
-    .status(statusCode)
-    .send({
-      message: statusCode === 500 ? 'На сервере произошла ошибка' : message,
-    });
+  res.status(statusCode).send({
+    message: statusCode === 500 ? 'На сервере произошла ошибка' : message,
+  });
   next();
 });
 
-app.listen(PORT, () => {
-
-});
+app.listen(PORT, () => {});
