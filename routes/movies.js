@@ -11,7 +11,7 @@ const {
 movieRouter.get('/movies', getMovies);
 movieRouter.post('/movies', celebrate({
   body: Joi.object().keys({
-    country: Joi.string(),
+    country: Joi.string().allow(null),
     director: Joi.string().required().min(2),
     duration: Joi.number().required(),
     year: Joi.string().required().min(4),

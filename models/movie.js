@@ -7,7 +7,6 @@ const movieSchema = new mongoose.Schema({
   },
   nameEN: {
     type: String,
-    required: true,
   },
   director: {
     type: String,
@@ -32,7 +31,6 @@ const movieSchema = new mongoose.Schema({
   },
   trailer: {
     type: String,
-    required: true,
     match: /^(https?:\/\/)?([\w-]{1,32}\.[\w-]{1,32})[^\s@]*$/,
   },
   thumbnail: {
@@ -49,7 +47,6 @@ const movieSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-
 });
 
 module.exports = mongoose.model('movie', movieSchema);
