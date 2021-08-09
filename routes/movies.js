@@ -22,9 +22,7 @@ movieRouter.post('/movies', celebrate({
       }
       return helpers.message('Неверная ссылка');
     }),
-    trailer: Joi.string(),
     nameRU: Joi.string().required().min(2).max(40),
-    nameEN: Joi.string(),
     thumbnail: Joi.string().required().custom((value, helpers) => {
       if (isUrl(value, { require_protocol: true })) {
         return value;
